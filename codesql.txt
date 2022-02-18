@@ -1,0 +1,89 @@
+-- Database generated with pgModeler (PostgreSQL Database Modeler).
+-- pgModeler version: 0.9.4
+-- PostgreSQL version: 13.0
+-- Project Site: pgmodeler.io
+-- Model Author: ---
+
+-- Database creation must be performed outside a multi lined SQL file. 
+-- These commands were put in this file only as a convenience.
+-- 
+-- object: new_database | type: DATABASE --
+-- DROP DATABASE IF EXISTS new_database;
+CREATE DATABASE new_database;
+-- ddl-end --
+
+
+-- object: public."Employes" | type: TABLE --
+-- DROP TABLE IF EXISTS public."Employes" CASCADE;
+CREATE TABLE public."Employes" (
+	employes_id serial NOT NULL,
+	nom varchar(30) NOT NULL,
+	prenom varchar(30) NOT NULL,
+	mail_box varchar(30) NOT NULL,
+	categorie varchar(30) NOT NULL,
+	CONSTRAINT employes_id PRIMARY KEY (employes_id)
+);
+-- ddl-end --
+ALTER TABLE public."Employes" OWNER TO postgres;
+-- ddl-end --
+
+-- object: public.mail | type: TABLE --
+-- DROP TABLE IF EXISTS public.mail CASCADE;
+CREATE TABLE public.mail (
+	mail_id serial,
+	expediteurmail_id smallint NOT NULL,
+	date date NOT NULL,
+	titre varchar(200) NOT NULL,
+	message varchar(10000) NOT NULL
+
+);
+-- ddl-end --
+ALTER TABLE public.mail OWNER TO postgres;
+-- ddl-end --
+
+-- object: public.email | type: TABLE --
+-- DROP TABLE IF EXISTS public.email CASCADE;
+CREATE TABLE public.email (
+	email_id serial NOT NULL,
+	employes_id smallint,
+	CONSTRAINT email_id PRIMARY KEY (email_id)
+);
+-- ddl-end --
+ALTER TABLE public.email OWNER TO postgres;
+-- ddl-end --
+
+-- object: public.destinataire | type: TABLE --
+-- DROP TABLE IF EXISTS public.destinataire CASCADE;
+CREATE TABLE public.destinataire (
+	destinataire_id serial NOT NULL,
+	mail_id smallint NOT NULL,
+	type varchar NOT NULL,
+	statut varchar NOT NULL,
+	CONSTRAINT destinataire_id PRIMARY KEY (destinataire_id)
+);
+-- ddl-end --
+ALTER TABLE public.destinataire OWNER TO postgres;
+-- ddl-end --
+
+-- object: expediteurmail_id | type: CONSTRAINT --
+-- ALTER TABLE public.mail DROP CONSTRAINT IF EXISTS expediteurmail_id CASCADE;
+ALTER TABLE public.mail ADD CONSTRAINT expediteurmail_id FOREIGN KEY (expediteurmail_id)
+REFERENCES public.email (email_id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: employes_id | type: CONSTRAINT --
+-- ALTER TABLE public.email DROP CONSTRAINT IF EXISTS employes_id CASCADE;
+ALTER TABLE public.email ADD CONSTRAINT employes_id FOREIGN KEY (employes_id)
+REFERENCES public."Employes" (employes_id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: mail_id | type: CONSTRAINT --
+-- ALTER TABLE public.destinataire DROP CONSTRAINT IF EXISTS mail_id CASCADE;
+ALTER TABLE public.destinataire ADD CONSTRAINT mail_id FOREIGN KEY (mail_id)
+REFERENCES public.mail (mail_id) MATCH SIMPLE
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+-- ddl-end --
+
+
